@@ -1,6 +1,5 @@
 env:
   matrix:
-  - CABALVER=1.18 GHCVER=7.6.3
   - CABALVER=1.18 GHCVER=7.8.4
   - CABALVER=1.22 GHCVER=7.10.1
   - CABALVER=head GHCVER=head
