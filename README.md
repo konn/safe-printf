@@ -2,7 +2,7 @@ safe-printf -- Well-typed, variadic and flexible printf functions for Haskell
 =============================================================================
 
 [![Build Status](https://travis-ci.org/konn/safe-printf.svg?branch=master)](https://travis-ci.org/konn/safe-printf) 
-[![loop-effin](http://img.shields.io/hackage/v/safe-printf.svg)](http://hackage.haskell.org/package/safe-printf)
+[![safe-printf](http://img.shields.io/hackage/v/safe-printf.svg)](http://hackage.haskell.org/package/safe-printf)
 
 ## What is this?
 Haskell's standard `Text.Printf` module provides variadic `printf` function but not type-safe.
