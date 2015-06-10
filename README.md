@@ -1,4 +1,4 @@
-printf-safe -- Well-typed, variadic and flexible printf functions for Haskell
+safe-printf -- Well-typed, variadic and flexible printf functions for Haskell
 =============================================================================
 
 [![Build Status](https://travis-ci.org/konn/safe-printf.svg?branch=master)](https://travis-ci.org/konn/safe-printf) 
@@ -46,8 +46,6 @@ main = do
 ### Quasiquote interface
 Quiasiquote interface provides more readable way for generating formats.
 
-NOTE: Currently escape sequence such as `\n` is not supported.
-
 ```haskell
 {-# LANGUAGE QuasiQuotes #-}
 module Main where
@@ -61,7 +59,6 @@ main = do
 ## TODO
 * Support `Text` and perhaps `Builder`.
 * Improve efficiency.
-* Support character escape.
 * Provide IO functions?
 * Provide unit-tests.
 
