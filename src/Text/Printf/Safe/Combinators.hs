@@ -1,6 +1,6 @@
 {-# LANGUAGE DataKinds, TypeFamilies, TypeOperators #-}
 module Text.Printf.Safe.Combinators (-- * Smart constructors
-                                     type (<>), (><), (%),
+                                     type (<>), (><), (%), (+++),
                                      -- * Basic formatters
                                      s, _S, _shows,
                                      -- ** Number Formatters
@@ -24,6 +24,10 @@ appNil :: Printf ts -> (ts <> '[]) :~: ts
 appNil EOS = Refl
 appNil (_ :<> a) = appNil a
 appNil (_ :% bs) = case appNil bs of Refl -> Refl
+
+(+++) :: Printf ts -> Printf ps -> Printf (ts <> ps)
+(+++) = appPrf
+infixr 5 +++
 
 (><) :: Printf ts -> String -> Printf ts
 xs >< str = gcastWith (appNil xs) $ appPrf xs (str :<> EOS)
