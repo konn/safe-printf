@@ -1,12 +1,16 @@
 {-# LANGUAGE RecordWildCards, TemplateHaskell #-}
 module Text.Printf.Safe.QQ (fmt) where
 import Data.Char                 (intToDigit, isDigit, isUpper, toUpper)
+import Data.Char                 (chr)
 import Data.Maybe                (fromMaybe)
 import Language.Haskell.Meta     (parseExp)
 import Language.Haskell.TH       (ExpQ)
 import Language.Haskell.TH.Lift  (lift)
 import Language.Haskell.TH.Quote (QuasiQuoter (..))
 import Numeric                   (showIntAtBase)
+import Numeric                   (readDec)
+import Numeric                   (readHex)
+import Numeric                   (readOct)
 import Text.Printf.Safe.Core     (Printf (..))
 
 fmt :: QuasiQuoter
@@ -40,15 +44,73 @@ parse = foldr cat [|EOS|] . parse'
       [| ((\str -> replicate (maybe 0 (subtract (length str)) $wid) $pad ++ str) .  flip $([| showIntAtBase $(lift base) ($(if capital then [|toUpper|] else [|id|]) . intToDigit) |]) "")  :% $r |]
     cat (AntiF code) r = [| $(return $ either error id $ parseExp code) :% $r |]
 
-parseFormat :: String -> [Fragment]
 parse' :: String -> [Fragment]
-parse' str = case break (=='%') str of
+parse' str = case break (`elem`"%\\") str of
   ("", "") -> []
   (as, "") -> [StrF as]
+  (as, '\\':bs) -> case parseEscape bs of
+    Just (ch, rest) -> StrF (as ++ ch) : parse' rest
+    Nothing -> error $ "illeagual escape sequence: \\" ++ (take 1 bs)
   (as, '%':'%':bs) -> StrF as : StrF "%" : parse' bs
   (as, '%':rest)   -> StrF as : parseFormat rest
   (as, bs) -> StrF as : parse' bs
 
+parseEscape :: String -> Maybe (String, String)
+parseEscape ('a':rest)  = Just ("\a", rest)
+parseEscape ('b':rest)  = Just ("\b", rest)
+parseEscape ('f':rest)  = Just ("\f", rest)
+parseEscape ('n':rest)  = Just ("\n", rest)
+parseEscape ('r':rest)  = Just ("\r", rest)
+parseEscape ('t':rest)  = Just ("\t", rest)
+parseEscape ('v':rest)  = Just ("\v", rest)
+parseEscape ('\\':rest) = Just ("\\", rest)
+parseEscape (']':rest) = Just ("]", rest)
+parseEscape ('&':rest) = Just ("", rest)
+parseEscape ('"':rest) = Just ("\"", rest)
+parseEscape ('\'':rest) = Just ("\'", rest)
+parseEscape ('N':'U':'L':rest) = Just ("\NUL", rest)
+parseEscape ('S':'O':'H':rest) = Just ("\SOH", rest)
+parseEscape ('S':'T':'X':rest) = Just ("\STX", rest)
+parseEscape ('E':'T':'X':rest) = Just ("\ETX", rest)
+parseEscape ('E':'O':'T':rest) = Just ("\EOT", rest)
+parseEscape ('E':'N':'Q':rest) = Just ("\ENQ", rest)
+parseEscape ('A':'C':'K':rest) = Just ("\ACK", rest)
+parseEscape ('B':'E':'L':rest) = Just ("\BEL", rest)
+parseEscape ('B':'S':rest) = Just ("\BS", rest)
+parseEscape ('H':'T':rest) = Just ("\HT", rest)
+parseEscape ('L':'F':rest) = Just ("\LF", rest)
+parseEscape ('V':'T':rest) = Just ("\VT", rest)
+parseEscape ('F':'F':rest) = Just ("\FF", rest)
+parseEscape ('C':'R':rest) = Just ("\CR", rest)
+parseEscape ('S':'O':rest) = Just ("\SO", rest)
+parseEscape ('S':'I':rest) = Just ("\SI", rest)
+parseEscape ('D':'L':'E':rest) = Just ("\DLE", rest)
+parseEscape ('D':'C':'1':rest) = Just ("\DC1", rest)
+parseEscape ('D':'C':'2':rest) = Just ("\DC2", rest)
+parseEscape ('D':'C':'3':rest) = Just ("\DC3", rest)
+parseEscape ('D':'C':'4':rest) = Just ("\DC4", rest)
+parseEscape ('N':'A':'K':rest) = Just ("\NAK", rest)
+parseEscape ('S':'Y':'N':rest) = Just ("\SYN", rest)
+parseEscape ('E':'T':'B':rest) = Just ("\ETB", rest)
+parseEscape ('C':'A':'N':rest) = Just ("\CAN", rest)
+parseEscape ('E':'M':rest) = Just ("\EM", rest)
+parseEscape ('S':'U':'B':rest) = Just ("\SUB", rest)
+parseEscape ('E':'S':'C':rest) = Just ("\ESC", rest)
+parseEscape ('F':'S':rest) = Just ("\FS", rest)
+parseEscape ('G':'S':rest) = Just ("\GS", rest)
+parseEscape ('R':'S':rest) = Just ("\RS", rest)
+parseEscape ('U':'S':rest) = Just ("\US", rest)
+parseEscape ('S':'P':rest) = Just ("\SP", rest)
+parseEscape ('D':'E':'L':rest) = Just ("\DEL", rest)
+parseEscape ('x':bs)
+  | (ds, rest) : _ <- readHex bs = Just ([chr ds], rest)
+parseEscape ('o':bs)
+  | (ds, rest) : _ <- readOct bs = Just ([chr ds], rest)
+parseEscape bs
+  | (ds, rest) : _ <- readDec bs = Just ([chr ds], rest)
+parseEscape _ = Nothing
+
+parseFormat :: String -> [Fragment]
 parseFormat "" = [StrF "%"]
 parseFormat ('{':r) = go (1 :: Int) "" r
   where
