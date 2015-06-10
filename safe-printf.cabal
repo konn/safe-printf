@@ -26,7 +26,7 @@ library
                        Text.Printf.Safe.Core,
                        Text.Printf.Safe.Combinators
   -- other-modules:       
-  build-depends:       base >=4.7 && <4.8
+  build-depends:       base >=4 && <5
                      , haskell-src-meta >=0.6 && <0.7
                      , template-haskell >=2.9 && <2.10
                      , th-lift >=0.6 && <0.7
