@@ -25,7 +25,7 @@ data HList ts where
   HNil :: HList '[]
   (:-) :: a -> HList xs -> HList (a ': xs)
 
-infixr 9 :-, :<>
+infixr 9 :-, :<>, :%
 
 -- | HList version.
 printf' :: Printf ts -> HList ts -> String
