@@ -4,17 +4,21 @@
 name:                safe-printf
 version:             0.1.0.0
 synopsis:            Well-typed, flexible and variadic printf for Haskell
--- description:         
+description:         More type-safe, flexible replacement of variadic printf for Text.Printf.
 homepage:            https://github.com/konn/safe-printf
 license:             BSD3
 license-file:        LICENSE
 author:              Hiromi ISHII
 maintainer:          konn.jinro_at_gmail.com
--- copyright:           
+copyright:           (c) Hiromi ISHII 2015
 category:            Text
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:  README.md, examples/*.hs
 cabal-version:       >=1.10
+
+source-repository head
+  Type: git
+  Location: git://github.com/konn/safe-printf.git
 
 library
   exposed-modules:     Text.Printf.Safe,
