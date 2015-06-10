@@ -4,7 +4,7 @@ module Text.Printf.Safe.Combinators (-- * Smart constructors
                                      -- * Basic formatters
                                      s, _S, _shows,
                                      -- ** Number Formatters
-                                     base, d, d', o, o', b, b', f) where
+                                     base, d, d', o, o', b, b', h, h', f) where
 import Data.Char             (intToDigit)
 import Data.Type.Equality    ((:~:) (..), gcastWith)
 import Numeric               (showFloat, showIntAtBase)
@@ -81,6 +81,14 @@ b' c i = base 2 (Just (c,i))
 -- | No padding version of @'b''@.
 b :: (Show a, Integral a) => Formatter a
 b = base 2 Nothing
+
+-- | Binary formatter with padding.
+h' :: (Show a, Integral a) => Char -> Int -> Formatter a
+h' c i = base 16 (Just (c,i))
+
+-- | No padding version of @'b''@.
+h :: (Show a, Integral a) => Formatter a
+h = base 16 Nothing
 
 -- | @RealFloat@ formatter.
 f :: RealFloat a => Formatter a
