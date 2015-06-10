@@ -60,7 +60,6 @@ main = do
 * Support `Text` and perhaps `Builder`.
 * Improve efficiency.
 * Provide IO functions?
-* Provide unit-tests.
 
 ## Licence
 
