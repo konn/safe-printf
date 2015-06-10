@@ -13,9 +13,9 @@ type Formatter a = a -> String
 
 -- | Printf Format.
 data Printf xs where
-  EOS   :: Printf '[] -- ^ End of String.
-  (:<>) :: String -> Printf xs -> Printf xs -- ^ Concat string
-  (:%)  :: Formatter x -> Printf xs -> Printf (x ': xs) -- ^ Concat format function
+  EOS   :: Printf '[]
+  (:<>) :: String -> Printf xs -> Printf xs
+  (:%)  :: Formatter x -> Printf xs -> Printf (x ': xs)
 
 instance (xs ~ '[]) => IsString (Printf xs) where
   fromString str = str :<> EOS

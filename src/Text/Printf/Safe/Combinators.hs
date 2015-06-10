@@ -25,15 +25,19 @@ appNil EOS = Refl
 appNil (_ :<> a) = appNil a
 appNil (_ :% bs) = case appNil bs of Refl -> Refl
 
-(+++) :: Printf ts -> Printf ps -> Printf (ts <> ps)
-(+++) = appPrf
-infixr 5 +++
 
+-- | Append plain string to format.
 (><) :: Printf ts -> String -> Printf ts
 xs >< str = gcastWith (appNil xs) $ appPrf xs (str :<> EOS)
 
+-- | Append formatter to format.
 (%) :: Printf ts -> (a -> String) -> Printf (ts <> '[a])
 (%) xs p = appPrf xs (p :% EOS)
+
+-- | Concatenate two prtinf formats.
+(+++) :: Printf ts -> Printf ps -> Printf (ts <> ps)
+(+++) = appPrf
+infixr 5 +++
 
 infixl 5 ><, %
 
