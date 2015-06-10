@@ -5,12 +5,12 @@ printf-safe -- Well-typed, variadic and flexible printf functions for Haskell
 [![loop-effin](http://img.shields.io/hackage/v/safe-printf.svg)](http://hackage.haskell.org/package/safe-printf)
 
 ## What is this?
-Haskell's standard `Text.Printf` module provides variadic `printf`{.haskell} function but not type-safe.
-This library provides an alternative for this, more type-safe version of `printf`{.haskell} function,
+Haskell's standard `Text.Printf` module provides variadic `printf` function but not type-safe.
+This library provides an alternative for this, more type-safe version of `printf` function,
 combinators and quasiquoters.
 
 The current implementation is just a proof-of-concept, so it is not so efficient and provides
-APIs only for `String`{.haskell} value generation. In future, we will support `Text`{.haskell}
+APIs only for `String` value generation. In future, we will support `Text`
 types and improve the effiiciency.
 
 ## Install
@@ -30,7 +30,7 @@ $ cabal install safe-printf
 We provide two interfaces to construct format: smart constructors and quasiquoters.
 
 ### Smart constructors
-You need `OverloadedStrings`{.haskell} extension.
+You need `OverloadedStrings` extension.
 
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
@@ -46,7 +46,7 @@ main = do
 ### Quasiquote interface
 Quiasiquote interface provides more readable way for generating formats.
 
-NOTE: Currently escape sequence such as `\n`{.haskell} is not supported.
+NOTE: Currently escape sequence such as `\n` is not supported.
 
 ```haskell
 {-# LANGUAGE QuasiQuotes #-}
@@ -59,7 +59,7 @@ main = do
 ```
 
 ## TODO
-* Support `Text`{.haskell} and perhaps `Builder`{.haskell}.
+* Support `Text` and perhaps `Builder`.
 * Improve efficiency.
 * Support character escape.
 * Provide IO functions?
